@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shock NCLEX Game</title>
+<style>
+body{font-family:Arial;background:linear-gradient(135deg,#fff1f8,#eef2ff);margin:0;padding:20px;color:#2b1230}
+.card{max-width:900px;margin:auto;background:white;padding:24px;border-radius:24px;box-shadow:0 10px 30px #c9b6d9}
+button{font-size:18px;padding:14px 18px;margin:8px 0;border:0;border-radius:16px;background:#e84a9b;color:white;font-weight:bold}
+.option{display:block;width:100%;text-align:left;background:white;color:#2b1230;border:2px solid #eadcf2}
+.selected{background:#f5f0ff;border-color:#7c3aed}
+.correct{background:#e8f5ee!important;border-color:green!important}
+.wrong{background:#fdecea!important;border-color:red!important}
+.hidden{display:none}
+.rationale{margin-top:14px;padding:14px;border-left:6px solid #7c3aed;background:#faf5ff;border-radius:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🩺 Shock NCLEX Game</h1>
+<p>ATI/NCLEX style • no typing • iPad friendly</p>
+
+<div id="home">
+<button onclick="start()">Start Game</button>
+</div>
+
+<div id="game" class="hidden">
+<h2 id="num"></h2>
+<p id="stem"></p>
+<div id="options"></div>
+<div id="rationale" class="rationale hidden"></div>
+<button id="submit" onclick="submit()">Submit</button>
+<button id="next" class="hidden" onclick="next()">Next</button>
+</div>
+
+<div id="end" class="hidden">
+<h2 id="score"></h2>
+<button onclick="location.reload()">Play Again</button>
+</div>
+</div>
+
+<script>
+const qs=[
+{q:"A trauma client has BP 118/76, HR 128, RR 28, cool clammy skin, and anxiety. Which stage of shock is this?",o:["Compensated shock","Progressive shock","Decompensated shock","Septic shock"],a:[0],r:"Normal BP with tachycardia, tachypnea, anxiety, and cool clammy skin = compensated shock."},
+{q:"Which findings suggest worsening hypoperfusion? Select all that apply.",o:["New confusion","Urine output 15 mL/hr","Metabolic acidosis","Cool clammy skin","Bounding pulses"],a:[0,1,2,3],r:"Confusion, low urine output, acidosis, and cool clammy skin show poor tissue perfusion."},
+{q:"The nurse suspects shock. What is the priority action?",o:["Begin ABCDE primary survey","Insert Foley","Get full history","Draw routine labs"],a:[0],r:"Emergency care starts with ABCDE to correct life-threatening problems first."},
+{q:"Which shock type is associated with hypotension and bradycardia?",o:["Hypovolemic","Neurogenic","Cardiogenic","Anaphylactic"],a:[1],r:"Neurogenic shock is the oddball: hypotension + bradycardia."},
+{q:"A client has wheezing, tongue swelling, hives, and BP 78/40 after IV contrast. What medication is priority?",o:["Diphenhydramine","Epinephrine","Prednisone","Acetaminophen"],a:[1],r:"Anaphylaxis threatens airway and circulation. Epinephrine comes first."},
+{q:"Which fluids are used initially in shock?",o:["D5W","NS or LR","0.45% NS","TPN"],a:[1],r:"NS or LR are used initially until the cause is established."},
+{q:"Albumin helps shock by:",o:["Pulling fluid into blood vessels","Killing bacteria","Lowering BP","Replacing RBCs"],a:[0],r:"Albumin acts like a magnet and pulls fluid from tissues into the bloodstream."},
+{q:"Early septic shock usually has:",o:["Warm flushed skin","Severe bradycardia","Cold mottled skin first","Absent bowel sounds only"],a:[0],r:"Early septic shock is warm/flushed due to vasodilation."},
+{q:"Which findings support cardiogenic shock? Select all that apply.",o:["Crackles","Frothy sputum","JVD","Generalized edema","Severe diarrhea"],a:[0,1,2,3],r:"Cardiogenic shock is pump failure with CHF-type signs."},
+{q:"Absent breath sounds on one side, tracheal deviation, JVD, and hypotension suggest:",o:["Obstructive shock","Septic shock","Neurogenic shock","Mild dehydration"],a:[0],r:"Tension pneumothorax can cause obstructive shock."},
+{q:"A shock client starts bleeding from IV sites. Which labs are priority?",o:["PT/INR, PTT, platelets","A1C only","Amylase/lipase","Calcium only"],a:[0],r:"Shock can cause DIC, so monitor coagulation labs and platelets."},
+{q:"A septic shock client changes from warm/flushed to cool, pale, hypotensive, and less responsive. This means:",o:["Worsening shock","Recovery","Pain response","Normal antibiotic effect"],a:[0],r:"This suggests progression from early septic shock into worsening hypoperfusion."},
+{q:"Which client should the nurse see first?",o:["Septic shock client now cold/clammy","Hypovolemic shock client UO 40 mL/hr","BP improved after dopamine","Hives improved after epi"],a:[0],r:"A change to cold/clammy skin in septic shock shows deterioration."},
+{q:"Highest risk for hypovolemic shock?",o:["Four days vomiting and diarrhea","Seasonal allergies","Stable hypertension","Healed incision"],a:[0],r:"Vomiting and diarrhea cause major fluid loss."},
+{q:"Which findings support anaphylactic shock? Select all that apply.",o:["Wheezing","Angioedema","Urticaria","Pruritus","Laryngeal edema"],a:[0,1,2,3,4],r:"Anaphylaxis includes airway swelling, wheezing, hives, itching, and edema."},
+{q:"Which position should be avoided in shock?",o:["Regular Trendelenburg","Semi-Fowler’s","Modified Trendelenburg","Position supporting breathing"],a:[0],r:"Your lecture says regular Trendelenburg should not be used for shock."},
+{q:"Which finding suggests poor kidney perfusion?",o:["Urine output 15 mL/hr","Urine output 60 mL/hr","Clear yellow urine","Thirst"],a:[0],r:"Low urine output means the kidneys are not being perfused."},
+{q:"pH 7.28 with elevated lactate in shock suggests:",o:["Anaerobic metabolism","Recovery","Improved perfusion","Normal finding"],a:[0],r:"Poor oxygen delivery causes anaerobic metabolism and lactic acidosis."},
+{q:"Which medications support circulation in shock? Select all that apply.",o:["Dopamine","Epinephrine","Norepinephrine","Metoprolol","Albumin"],a:[0,1,2,4],r:"Dopamine, epinephrine, norepinephrine, and albumin support circulation."},
+{q:"Which finding fits decompensated shock?",o:["Unconscious with anuria","Anxious with normal BP","Warm flushed skin","UO 45 mL/hr"],a:[0],r:"Decompensated shock includes unconsciousness, anuria, and organ failure signs."}
+];
+
+let i=0,score=0,selected=[],answered=false;
+
+function start(){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+show();
+}
+
+function show(){
+selected=[]; answered=false;
+let q=qs[i];
+document.getElementById("num").innerText="Question "+(i+1)+" of "+qs.length;
+document.getElementById("stem").innerText=q.q;
+document.getElementById("rationale").classList.add("hidden");
+document.getElementById("submit").classList.remove("hidden");
+document.getElementById("next").classList.add("hidden");
+let html="";
+q.o.forEach((x,n)=>html+=`<button class="option" id="o${n}" onclick="pick(${n})">${String.fromCharCode(65+n)}. ${x}</button>`);
+document.getElementById("options").innerHTML=html;
+}
+
+function pick(n){
+if(answered)return;
+let q=qs[i];
+if(q.a.length===1){selected=[n];}
+else{
+if(selected.includes(n)){selected=selected.filter(x=>x!==n);}
+else{selected.push(n);}
+}
+q.o.forEach((_,x)=>document.getElementById("o"+x).classList.toggle("selected",selected.includes(x)));
+}
+
+function same(a,b){
+a=[...a].sort(); b=[...b].sort();
+return JSON.stringify(a)===JSON.stringify(b);
+}
+
+function submit(){
+if(selected.length===0){alert("Pick an answer first 😭");return;}
+answered=true;
+let q=qs[i];
+let ok=same(selected,q.a);
+if(ok)score++;
+q.o.forEach((_,n)=>{
+let el=document.getElementById("o"+n);
+el.classList.remove("selected");
+if(q.a.includes(n))el.classList.add("correct");
+else if(selected.includes(n))el.classList.add("wrong");
+});
+document.getElementById("rationale").innerHTML=(ok?"✅ Correct":"❌ Not quite")+"<br><br>"+q.r;
+document.getElementById("rationale").classList.remove("hidden");
+document.getElementById("submit").classList.add("hidden");
+document.getElementById("next").classList.remove("hidden");
+}
+
+function next(){
+i++;
+if(i>=qs.length){
+document.getElementById("game").classList.add("hidden");
+document.getElementById("end").classList.remove("hidden");
+let pct=Math.round(score/qs.length*100);
+document.getElementById("score").innerText="Score: "+score+"/"+qs.length+" ("+pct+"%)";
+}else show();
+}
+</script>
+</body>
+</html>
