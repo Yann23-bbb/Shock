@@ -2059,7 +2059,345 @@ function submitBowtie(q){
   ],
   answer:[0],
   rationale:"Improved urine output shows improved kidney perfusion."
-}  
+},
+  {
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"The Silent Shock Trap",
+  case:"A postoperative client reports, 'I just feel exhausted.' Assessment: BP 118/74, HR 132, RR 28, cool clammy skin, delayed capillary refill.",
+  stem:"What is the nurse's priority interpretation?",
+  options:[
+    "The client is stable because the blood pressure is normal.",
+    "The client may be in compensated shock despite a normal BP.",
+    "The client is experiencing anxiety only.",
+    "The client should be reassessed in one hour."
+  ],
+  answer:[1],
+  rationale:"ATI loves this trap. Compensated shock often maintains a normal blood pressure while perfusion is already decreasing."
+},
+{
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"Who Dies First?",
+  stem:"Which client requires immediate assessment?",
+  options:[
+    "BP 124/78 HR 110 after surgery",
+    "BP 88/48 HR 144 confused with urine output 12 mL/hr",
+    "Temperature 101.2°F with sore throat",
+    "Pain 8/10 after dressing change"
+  ],
+  answer:[1],
+  rationale:"Hypotension, confusion, tachycardia, and oliguria indicate life-threatening hypoperfusion."
+},
+{
+  type:"sata",
+  topic:"ATI Professor Pack B",
+  title:"Poor Organ Perfusion",
+  stem:"Which findings demonstrate inadequate organ perfusion? Select all that apply.",
+  options:[
+    "Confusion",
+    "Urine output 10 mL/hr",
+    "Cool clammy skin",
+    "Delayed capillary refill",
+    "Strong peripheral pulses",
+    "Warm pink extremities"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Poor perfusion decreases cerebral, renal, and peripheral circulation."
+},
+{
+  type:"matrix",
+  topic:"ATI Professor Pack B",
+  title:"Prioritize the Assessment",
+  stem:"Classify each finding by the organ system most affected.",
+  columns:["Brain","Kidneys","Peripheral Perfusion"],
+  rows:[
+    {finding:"Confusion",answer:0},
+    {finding:"Urine output 8 mL/hr",answer:1},
+    {finding:"Cool clammy skin",answer:2},
+    {finding:"Restlessness",answer:0},
+    {finding:"Weak pulses",answer:2}
+  ],
+  rationale:"ATI frequently asks you to connect assessment findings to organ perfusion."
+},
+{
+  type:"bowtie",
+  topic:"ATI Professor Pack B",
+  title:"Hemorrhagic Shock",
+  case:"A trauma client has uncontrolled abdominal bleeding. BP 74/40, HR 150, cool clammy skin, and decreasing LOC.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Hypovolemic shock",
+    "Cardiogenic shock",
+    "Neurogenic shock",
+    "Septic shock"
+  ],
+  actionOptions:[
+    "Control bleeding",
+    "Administer blood products",
+    "Give furosemide",
+    "Restrict fluids",
+    "Encourage ambulation"
+  ],
+  monitorOptions:[
+    "Blood pressure",
+    "Urine output",
+    "Appetite",
+    "Vision",
+    "Bowel sounds"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Stopping hemorrhage and replacing blood volume are priorities."
+},
+{
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"Lactate Trend",
+  stem:"A client's lactate increases from 2.1 to 5.8 mmol/L. What does this indicate?",
+  options:[
+    "Improving perfusion",
+    "Worsening tissue hypoxia",
+    "Kidney recovery",
+    "Expected finding after fluids"
+  ],
+  answer:[1],
+  rationale:"Increasing lactate reflects worsening anaerobic metabolism."
+},
+{
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"Urine Output",
+  stem:"Which urine output requires immediate intervention in an adult with shock?",
+  options:[
+    "55 mL/hr",
+    "42 mL/hr",
+    "28 mL/hr",
+    "8 mL/hr"
+  ],
+  answer:[3],
+  rationale:"Urine output of 8 mL/hr indicates severe renal hypoperfusion."
+},
+{
+  type:"sata",
+  topic:"ATI Professor Pack B",
+  title:"Immediate Priorities",
+  stem:"Which interventions are priorities for a client in shock? Select all that apply.",
+  options:[
+    "Apply oxygen",
+    "Establish large-bore IV access",
+    "Monitor urine output",
+    "Treat the underlying cause",
+    "Delay interventions until all labs return",
+    "Monitor mental status"
+  ],
+  answer:[0,1,2,3,5],
+  rationale:"Support oxygenation, circulation, and monitor perfusion while treating the underlying cause."
+},
+{
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"Best Evidence of Improvement",
+  stem:"Which assessment best indicates successful treatment of shock?",
+  options:[
+    "Urine output rises to 35 mL/hr",
+    "Heart rate remains 142/min",
+    "Client is still confused",
+    "Blood pressure continues falling"
+  ],
+  answer:[0],
+  rationale:"Adequate urine output is one of the best bedside indicators of improving perfusion."
+},
+{
+  type:"mc",
+  topic:"ATI Professor Pack B",
+  title:"Final Trap",
+  stem:"Which statement is TRUE?",
+  options:[
+    "Normal blood pressure rules out shock.",
+    "Shock is inadequate tissue perfusion.",
+    "Shock always begins with hypotension.",
+    "Every client in shock receives the same treatment."
+  ],
+  answer:[1],
+  rationale:"ATI's favorite definition: shock is inadequate tissue perfusion leading to cellular hypoxia and organ dysfunction."
+},  
+   {
+  type:"mc",
+  topic:"NGN Case: GI Bleed",
+  title:"Recognize Cues",
+  case:"ED Note: A 64-year-old client arrives with black tarry stools x2 days, dizziness, weakness, and abdominal pain. Vitals: BP 88/46, HR 146, RR 30, SpO2 94%. Skin cool and clammy. UO 12 mL/hr.",
+  stem:"Which cue is the strongest indicator of poor organ perfusion?",
+  options:[
+    "Black tarry stools",
+    "Urine output 12 mL/hr",
+    "Abdominal pain",
+    "SpO2 94%"
+  ],
+  answer:[1],
+  rationale:"Low urine output is a direct sign of poor kidney perfusion and worsening shock."
+},
+{
+  type:"sata",
+  topic:"NGN Case: GI Bleed",
+  title:"Select the Evidence",
+  case:"Client has black tarry stools, BP 88/46, HR 146, RR 30, cool clammy skin, dizziness, and UO 12 mL/hr.",
+  stem:"Which findings support hypovolemic shock? Select all that apply.",
+  options:[
+    "Black tarry stools",
+    "BP 88/46",
+    "HR 146",
+    "Cool clammy skin",
+    "Urine output 12 mL/hr",
+    "SpO2 94%"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"GI bleeding causes volume loss. Hypotension, tachycardia, cool clammy skin, and low urine output support hypovolemic shock."
+},
+{
+  type:"mc",
+  topic:"NGN Case: GI Bleed",
+  title:"Priority Hypothesis",
+  case:"A client with suspected GI bleeding has BP 84/42, HR 152, cool clammy skin, confusion, and UO 8 mL/hr.",
+  stem:"Which hypothesis is priority?",
+  options:[
+    "Hypovolemic shock from blood loss",
+    "Cardiogenic shock from pump failure",
+    "Anaphylactic shock from allergen exposure",
+    "Neurogenic shock from spinal cord injury"
+  ],
+  answer:[0],
+  rationale:"Blood loss from GI bleeding causes decreased circulating volume, leading to hypovolemic shock."
+},
+{
+  type:"mc",
+  topic:"NGN Case: GI Bleed",
+  title:"Take Action",
+  case:"Provider orders: oxygen, large-bore IV, NS bolus, type and screen, blood products, and stool softener.",
+  stem:"Which order should the nurse implement first?",
+  options:[
+    "Apply oxygen",
+    "Give stool softener",
+    "Teach about diet",
+    "Ambulate to bathroom"
+  ],
+  answer:[0],
+  rationale:"ABCs first. Oxygen supports tissue oxygenation while circulation interventions are prepared."
+},
+{
+  type:"matrix",
+  topic:"NGN Case: GI Bleed",
+  title:"Classify Orders",
+  stem:"Classify each order for the client with GI bleeding and hypovolemic shock.",
+  columns:["Priority","Nonpriority","Question"],
+  rows:[
+    {finding:"Apply oxygen",answer:0},
+    {finding:"Establish large-bore IV access",answer:0},
+    {finding:"Prepare blood products",answer:0},
+    {finding:"Ambulate independently to bathroom",answer:2},
+    {finding:"Monitor urine output",answer:0},
+    {finding:"Teach low-fat diet now",answer:1}
+  ],
+  rationale:"Oxygen, IV access, blood, and urine output monitoring support perfusion. Ambulating an unstable shock client is unsafe. Diet teaching can wait."
+},
+{
+  type:"bowtie",
+  topic:"NGN Case: GI Bleed",
+  title:"Hypovolemic Shock Bow-Tie",
+  case:"Client with black tarry stools has BP 78/40, HR 154, RR 34, confusion, cool clammy skin, weak pulses, and UO 8 mL/hr.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Hypovolemic shock",
+    "Septic shock",
+    "Cardiogenic shock",
+    "Neurogenic shock"
+  ],
+  actionOptions:[
+    "Administer oxygen",
+    "Prepare large-bore IV and blood products",
+    "Give furosemide first",
+    "Place in regular Trendelenburg",
+    "Encourage oral fluids only"
+  ],
+  monitorOptions:[
+    "Urine output",
+    "Blood pressure and heart rate",
+    "Hives only",
+    "Appetite",
+    "Vision changes"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"This is hypovolemic shock from blood loss. Priorities are oxygen, IV access, blood/volume replacement, and monitoring perfusion."
+},
+{
+  type:"mc",
+  topic:"NGN Case: GI Bleed",
+  title:"Evaluate Outcome",
+  case:"After treatment, BP rises from 78/40 to 104/62, HR decreases from 154 to 112, UO increases from 8 to 34 mL/hr, and client is more alert.",
+  stem:"How should the nurse interpret this response?",
+  options:[
+    "Perfusion is improving",
+    "Shock is worsening",
+    "The client is fluid overloaded",
+    "The client is decompensating"
+  ],
+  answer:[0],
+  rationale:"Improved BP, lower HR, better urine output, and improved mental status indicate improved perfusion."
+},
+{
+  type:"mc",
+  topic:"NGN Case: Sepsis",
+  title:"Recognize Cues",
+  case:"A client with pneumonia has temp 103.2°F, HR 128, BP 94/52, warm flushed skin, confusion, and WBC 22,000.",
+  stem:"Which shock type is most likely developing?",
+  options:[
+    "Septic shock",
+    "Hypovolemic shock",
+    "Obstructive shock",
+    "Neurogenic shock"
+  ],
+  answer:[0],
+  rationale:"Infection, fever, elevated WBC, warm flushed skin, hypotension, and confusion support septic shock."
+},
+{
+  type:"sata",
+  topic:"NGN Case: Sepsis",
+  title:"Select the Evidence",
+  case:"Client with pneumonia: temp 103.2°F, HR 128, BP 94/52, warm flushed skin, confusion, WBC 22,000.",
+  stem:"Which findings support septic shock? Select all that apply.",
+  options:[
+    "Pneumonia",
+    "Temperature 103.2°F",
+    "WBC 22,000",
+    "Warm flushed skin",
+    "Confusion",
+    "Tongue swelling after medication"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Septic shock is infection-related distributive shock. Tongue swelling after medication points more toward anaphylaxis."
+},
+{
+  type:"mc",
+  topic:"NGN Case: Sepsis",
+  title:"Worsening Trend",
+  case:"0900: warm flushed skin, BP 96/54, HR 126. 1200: cool clammy skin, BP 78/42, HR 154, UO 10 mL/hr, confused.",
+  stem:"What is the best interpretation?",
+  options:[
+    "The client is improving",
+    "The client is progressing to worsening shock",
+    "This is expected after antibiotics",
+    "The client is ready for discharge"
+  ],
+  answer:[1],
+  rationale:"Septic shock can begin warm. Becoming cool, clammy, hypotensive, oliguric, and confused indicates deterioration."
+} 
 ];
 
 </script>
