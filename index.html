@@ -1883,7 +1883,183 @@ function submitBowtie(q){
     monitoring:[0,1]
   },
   rationale:"Severe vomiting causes volume loss. Hypovolemic shock priorities include large-bore IV access, isotonic fluids, and monitoring BP, HR, and urine output."
-}
+},
+  {
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Compensated Shock Trap",
+  case:"A client has BP 122/78, HR 138, RR 32, cool clammy skin, weak peripheral pulses, and anxiety.",
+  stem:"Which statement by the nurse is most accurate?",
+  options:[
+    "The client is stable because the blood pressure is normal.",
+    "The client is showing early compensatory signs of shock.",
+    "The client is in decompensated shock.",
+    "The client is experiencing fluid overload."
+  ],
+  answer:[1],
+  rationale:"Compensated shock can have a normal BP because the SNS is maintaining perfusion temporarily."
+},
+{
+  type:"sata",
+  topic:"Hard ATI Pack A",
+  title:"Progressive Shock Cues",
+  stem:"Which findings indicate progressive shock? Select all that apply.",
+  options:[
+    "Confusion",
+    "SBP 86 mmHg",
+    "Urine output 14 mL/hr",
+    "Metabolic acidosis",
+    "Normal urine output",
+    "Calm and oriented"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Progressive shock shows falling BP, confusion, low urine output, and acidosis."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Priority Action",
+  stem:"A nurse finds a client cool, clammy, confused, and hypotensive. What should the nurse do first?",
+  options:[
+    "Perform rapid ABCDE assessment",
+    "Obtain a full health history",
+    "Document the findings",
+    "Offer oral fluids"
+  ],
+  answer:[0],
+  rationale:"Shock is an emergency. ABCDE comes first."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Septic Shock Change",
+  case:"A client with sepsis was warm and flushed. Now the client is cool, clammy, confused, and BP is 80/44.",
+  stem:"What does this change indicate?",
+  options:[
+    "Improvement",
+    "Worsening shock",
+    "Normal antibiotic response",
+    "Pain relief"
+  ],
+  answer:[1],
+  rationale:"Early septic shock can be warm; cold clammy skin with hypotension indicates worsening perfusion."
+},
+{
+  type:"sata",
+  topic:"Hard ATI Pack A",
+  title:"Cardiogenic Shock Findings",
+  stem:"Which findings support cardiogenic shock? Select all that apply.",
+  options:[
+    "Crackles",
+    "Frothy sputum",
+    "JVD",
+    "Generalized edema",
+    "Severe diarrhea",
+    "Dry mucous membranes"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Cardiogenic shock is pump failure with CHF-like findings."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Question the Order",
+  case:"A client in cardiogenic shock has crackles, frothy sputum, and SpO2 86%.",
+  stem:"Which order should the nurse question?",
+  options:[
+    "Administer oxygen",
+    "Continuous cardiac monitoring",
+    "Rapid 2 L NS bolus without reassessment",
+    "Notify provider"
+  ],
+  answer:[2],
+  rationale:"Large fluid boluses can worsen pulmonary edema in cardiogenic shock."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Neurogenic Shock",
+  stem:"Which finding is most consistent with neurogenic shock?",
+  options:[
+    "Hypotension and bradycardia",
+    "Hypertension and tachycardia",
+    "Hives and wheezing",
+    "Frothy sputum"
+  ],
+  answer:[0],
+  rationale:"Neurogenic shock is the odd shock type with hypotension and bradycardia."
+},
+{
+  type:"bowtie",
+  topic:"Hard ATI Pack A",
+  title:"Anaphylaxis Bow-Tie",
+  case:"A client develops wheezing, hives, tongue swelling, and BP 70/38 after penicillin.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:["Anaphylactic shock","Cardiogenic shock","Hypovolemic shock","Neurogenic shock"],
+  actionOptions:["Administer epinephrine","Prepare airway/oxygen support","Give furosemide","Restrict fluids","Ambulate"],
+  monitorOptions:["Airway swelling","Blood pressure","Bowel sounds only","Daily weight","Appetite"],
+  answer:{condition:0,actions:[0,1],monitoring:[0,1]},
+  rationale:"Anaphylaxis needs epinephrine first and airway support. Monitor airway and BP."
+},
+{
+  type:"matrix",
+  topic:"Hard ATI Pack A",
+  title:"Shock Stage Matrix",
+  stem:"Classify each finding.",
+  columns:["Compensated","Progressive","Decompensated"],
+  rows:[
+    {finding:"Normal BP with HR 130",answer:0},
+    {finding:"Anxiety and impending doom",answer:0},
+    {finding:"Confusion with SBP 84",answer:1},
+    {finding:"Urine output 12 mL/hr",answer:1},
+    {finding:"Unconscious and anuric",answer:2}
+  ],
+  rationale:"Compensated maintains BP; progressive shows worsening perfusion; decompensated shows organ failure."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Albumin",
+  stem:"Albumin is ordered for a client with shock and third spacing. What is the expected effect?",
+  options:[
+    "Pull fluid into the bloodstream",
+    "Replace red blood cells",
+    "Destroy bacteria",
+    "Cause diuresis immediately"
+  ],
+  answer:[0],
+  rationale:"Albumin increases oncotic pressure and pulls fluid into the vascular space."
+},
+{
+  type:"sata",
+  topic:"Hard ATI Pack A",
+  title:"DIC Concern",
+  stem:"Which findings/labs suggest DIC in shock? Select all that apply.",
+  options:[
+    "Bleeding from IV sites",
+    "Low platelets",
+    "Elevated PT/INR",
+    "Petechiae",
+    "Normal clotting studies",
+    "Improved urine output"
+  ],
+  answer:[0,1,2,3],
+  rationale:"DIC causes abnormal bleeding, low platelets, and abnormal coagulation labs."
+},
+{
+  type:"mc",
+  topic:"Hard ATI Pack A",
+  title:"Best Indicator",
+  stem:"Which finding best shows improved perfusion after shock treatment?",
+  options:[
+    "Urine output 35 mL/hr",
+    "Client requests a blanket",
+    "Temperature unchanged",
+    "Pain 5/10"
+  ],
+  answer:[0],
+  rationale:"Improved urine output shows improved kidney perfusion."
+}  
 ];
 
 </script>
