@@ -1,133 +1,1891 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shock NCLEX Game</title>
+<title>Iyana's ATI Shock Simulator</title>
+
 <style>
-body{font-family:Arial;background:linear-gradient(135deg,#fff1f8,#eef2ff);margin:0;padding:20px;color:#2b1230}
-.card{max-width:900px;margin:auto;background:white;padding:24px;border-radius:24px;box-shadow:0 10px 30px #c9b6d9}
-button{font-size:18px;padding:14px 18px;margin:8px 0;border:0;border-radius:16px;background:#e84a9b;color:white;font-weight:bold}
-.option{display:block;width:100%;text-align:left;background:white;color:#2b1230;border:2px solid #eadcf2}
-.selected{background:#f5f0ff;border-color:#7c3aed}
-.correct{background:#e8f5ee!important;border-color:green!important}
-.wrong{background:#fdecea!important;border-color:red!important}
-.hidden{display:none}
-.rationale{margin-top:14px;padding:14px;border-left:6px solid #7c3aed;background:#faf5ff;border-radius:12px}
+:root{
+  --bg1:#fff1f8;
+  --bg2:#eef2ff;
+  --card:#ffffff;
+  --ink:#241126;
+  --muted:#6f5d75;
+  --pink:#e84a9b;
+  --purple:#7c3aed;
+  --soft:#faf5ff;
+  --softPink:#ffe1f0;
+  --border:#eadcf2;
+  --good:#0f9d58;
+  --bad:#d93025;
+  --warn:#f59e0b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--ink);
+  padding:18px;
+}
+
+.app{
+  max-width:980px;
+  margin:0 auto;
+}
+
+.card{
+  background:var(--card);
+  border-radius:24px;
+  padding:22px;
+  box-shadow:0 14px 36px rgba(80,40,100,.18);
+  border:1px solid rgba(232,74,155,.15);
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:32px;
+}
+
+h2{
+  margin:8px 0 12px;
+}
+
+p{
+  line-height:1.45;
+  font-size:17px;
+}
+
+.badge{
+  display:inline-block;
+  background:var(--softPink);
+  color:#8a1552;
+  font-weight:700;
+  padding:7px 11px;
+  border-radius:999px;
+  margin:4px 4px 4px 0;
+  font-size:14px;
+}
+
+button{
+  font-size:18px;
+  padding:14px 18px;
+  border:0;
+  border-radius:16px;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  color:white;
+  font-weight:800;
+  margin:8px 6px 0 0;
+  box-shadow:0 8px 20px rgba(124,58,237,.22);
+}
+
+button.secondary{
+  background:#f3e8ff;
+  color:#4c1d95;
+  box-shadow:none;
+}
+
+button.ghost{
+  background:white;
+  color:var(--purple);
+  border:2px solid #d8b4fe;
+  box-shadow:none;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.statline{
+  color:var(--muted);
+  font-size:15px;
+}
+
+.progressWrap{
+  height:14px;
+  background:#eee5f4;
+  border-radius:999px;
+  overflow:hidden;
+  margin:12px 0 18px;
+}
+
+.progressBar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  transition:width .25s ease;
+}
+
+.questionBox{
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+  margin-top:12px;
+}
+
+.caseBox{
+  background:#f8f4ff;
+  border-left:6px solid var(--purple);
+  border-radius:16px;
+  padding:14px;
+  margin:12px 0;
+}
+
+.option{
+  width:100%;
+  display:block;
+  text-align:left;
+  background:white;
+  color:var(--ink);
+  border:2px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  margin:10px 0;
+  box-shadow:none;
+}
+
+.option.selected{
+  border-color:var(--purple);
+  background:#f4edff;
+}
+
+.option.correct{
+  border-color:var(--good) !important;
+  background:#e8f5ee !important;
+}
+
+.option.wrong{
+  border-color:var(--bad) !important;
+  background:#fdecea !important;
+}
+
+.rationale{
+  margin-top:16px;
+  border-left:6px solid var(--purple);
+  background:var(--soft);
+  padding:14px;
+  border-radius:14px;
+  font-size:17px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+
+.panel{
+  background:#fff7fc;
+  border:1px solid #ffd1e8;
+  border-radius:18px;
+  padding:14px;
+}
+
+.small{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.tableWrap{
+  overflow-x:auto;
+}
+
+.matrix{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+  font-size:15px;
+}
+
+.matrix th,
+.matrix td{
+  border:1px solid var(--border);
+  padding:10px;
+  text-align:center;
+}
+
+.matrix th:first-child,
+.matrix td:first-child{
+  text-align:left;
+}
+
+.matrix button{
+  margin:0;
+  padding:8px 10px;
+  font-size:14px;
+  border-radius:12px;
+  background:#f3e8ff;
+  color:#4c1d95;
+  box-shadow:none;
+}
+
+.matrix button.selected{
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  color:white;
+}
+
+.bowtie{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+@media(min-width:760px){
+  .bowtie{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+.dropZone{
+  border:2px dashed #d8b4fe;
+  background:#fbf7ff;
+  border-radius:18px;
+  padding:12px;
+  min-height:80px;
+}
+
+.choicePill{
+  display:block;
+  width:100%;
+  background:white;
+  border:2px solid var(--border);
+  color:var(--ink);
+  border-radius:999px;
+  padding:10px 12px;
+  margin:8px 0;
+  text-align:left;
+  box-shadow:none;
+  font-size:15px;
+}
+
+.choicePill.selected{
+  border-color:var(--purple);
+  background:#f4edff;
+}
+
+.reviewItem{
+  border-top:1px solid #eee;
+  padding:14px 0;
+}
+
+.locked{
+  opacity:.7;
+  pointer-events:none;
+}
 </style>
 </head>
+
 <body>
-<div class="card">
-<h1>🩺 Shock NCLEX Game</h1>
-<p>ATI/NCLEX style • no typing • iPad friendly</p>
+<div class="app">
 
-<div id="home">
-<button onclick="start()">Start Game</button>
-</div>
+  <section id="homeScreen" class="card">
+    <h1>🩺 Iyana's ATI Shock Simulator</h1>
+    <p>
+      Hard-mode shock practice built like ATI/NCLEX: priority, SATA, NGN case studies,
+      matrix, bow-tie style thinking, and rationales after every answer.
+    </p>
 
-<div id="game" class="hidden">
-<h2 id="num"></h2>
-<p id="stem"></p>
-<div id="options"></div>
-<div id="rationale" class="rationale hidden"></div>
-<button id="submit" onclick="submit()">Submit</button>
-<button id="next" class="hidden" onclick="next()">Next</button>
-</div>
+    <p>
+      <span class="badge">Shock</span>
+      <span class="badge">ATI-style</span>
+      <span class="badge">No typing</span>
+      <span class="badge">iPad friendly</span>
+      <span class="badge">Hard mode</span>
+    </p>
 
-<div id="end" class="hidden">
-<h2 id="score"></h2>
-<button onclick="location.reload()">Play Again</button>
-</div>
+    <div class="grid">
+      <div class="panel">
+        <h2>📚 Study Mode</h2>
+        <p class="small">Immediate rationales after each question. Best for learning.</p>
+        <button onclick="startGame('study')">Start Study Mode</button>
+      </div>
+
+      <div class="panel">
+        <h2>🔥 Challenge Mode</h2>
+        <p class="small">Harder feel. Score matters. Review weak areas at the end.</p>
+        <button onclick="startGame('challenge')">Start Challenge Mode</button>
+      </div>
+
+      <div class="panel">
+        <h2>🧠 Review</h2>
+        <p class="small">After you play, missed questions show here.</p>
+        <button class="secondary" onclick="showReview()">Review Missed</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="gameScreen" class="card hidden">
+    <div class="topbar">
+      <div>
+        <strong id="modeLabel">Study Mode</strong>
+        <div class="statline" id="topicLabel">Topic</div>
+      </div>
+      <div>
+        <strong id="scoreLabel">Score: 0/0</strong>
+        <div class="statline" id="questionCount">Question 1/1</div>
+      </div>
+    </div>
+
+    <div class="progressWrap">
+      <div id="progressBar" class="progressBar"></div>
+    </div>
+
+    <div id="questionArea" class="questionBox">
+      <h2 id="questionTitle"></h2>
+      <div id="caseText"></div>
+      <p id="questionStem"></p>
+      <p id="questionHint" class="small"></p>
+      <div id="answerArea"></div>
+      <div id="rationaleBox" class="rationale hidden"></div>
+      <button id="submitBtn" onclick="submitAnswer()">Submit</button>
+      <button id="nextBtn" class="secondary hidden" onclick="nextQuestion()">Next</button>
+    </div>
+  </section>
+
+  <section id="resultScreen" class="card hidden">
+    <h1>🏆 Results</h1>
+    <div class="grid">
+      <div class="panel">
+        <h2 id="finalScore">Score</h2>
+        <p class="small">Final score</p>
+      </div>
+      <div class="panel">
+        <h2 id="readiness">Readiness</h2>
+        <p class="small">Exam readiness</p>
+      </div>
+    </div>
+
+    <h2>📊 Topic Breakdown</h2>
+    <div id="topicBreakdown"></div>
+
+    <button onclick="restartApp()">Home</button>
+    <button class="secondary" onclick="showReview()">Review Missed</button>
+  </section>
+
+  <section id="reviewScreen" class="card hidden">
+    <h1>🧠 Missed Question Review</h1>
+    <div id="reviewList"></div>
+    <button onclick="restartApp()">Back Home</button>
+  </section>
+
 </div>
 
 <script>
-const qs=[
-{q:"A trauma client has BP 118/76, HR 128, RR 28, cool clammy skin, and anxiety. Which stage of shock is this?",o:["Compensated shock","Progressive shock","Decompensated shock","Septic shock"],a:[0],r:"Normal BP with tachycardia, tachypnea, anxiety, and cool clammy skin = compensated shock."},
-{q:"Which findings suggest worsening hypoperfusion? Select all that apply.",o:["New confusion","Urine output 15 mL/hr","Metabolic acidosis","Cool clammy skin","Bounding pulses"],a:[0,1,2,3],r:"Confusion, low urine output, acidosis, and cool clammy skin show poor tissue perfusion."},
-{q:"The nurse suspects shock. What is the priority action?",o:["Begin ABCDE primary survey","Insert Foley","Get full history","Draw routine labs"],a:[0],r:"Emergency care starts with ABCDE to correct life-threatening problems first."},
-{q:"Which shock type is associated with hypotension and bradycardia?",o:["Hypovolemic","Neurogenic","Cardiogenic","Anaphylactic"],a:[1],r:"Neurogenic shock is the oddball: hypotension + bradycardia."},
-{q:"A client has wheezing, tongue swelling, hives, and BP 78/40 after IV contrast. What medication is priority?",o:["Diphenhydramine","Epinephrine","Prednisone","Acetaminophen"],a:[1],r:"Anaphylaxis threatens airway and circulation. Epinephrine comes first."},
-{q:"Which fluids are used initially in shock?",o:["D5W","NS or LR","0.45% NS","TPN"],a:[1],r:"NS or LR are used initially until the cause is established."},
-{q:"Albumin helps shock by:",o:["Pulling fluid into blood vessels","Killing bacteria","Lowering BP","Replacing RBCs"],a:[0],r:"Albumin acts like a magnet and pulls fluid from tissues into the bloodstream."},
-{q:"Early septic shock usually has:",o:["Warm flushed skin","Severe bradycardia","Cold mottled skin first","Absent bowel sounds only"],a:[0],r:"Early septic shock is warm/flushed due to vasodilation."},
-{q:"Which findings support cardiogenic shock? Select all that apply.",o:["Crackles","Frothy sputum","JVD","Generalized edema","Severe diarrhea"],a:[0,1,2,3],r:"Cardiogenic shock is pump failure with CHF-type signs."},
-{q:"Absent breath sounds on one side, tracheal deviation, JVD, and hypotension suggest:",o:["Obstructive shock","Septic shock","Neurogenic shock","Mild dehydration"],a:[0],r:"Tension pneumothorax can cause obstructive shock."},
-{q:"A shock client starts bleeding from IV sites. Which labs are priority?",o:["PT/INR, PTT, platelets","A1C only","Amylase/lipase","Calcium only"],a:[0],r:"Shock can cause DIC, so monitor coagulation labs and platelets."},
-{q:"A septic shock client changes from warm/flushed to cool, pale, hypotensive, and less responsive. This means:",o:["Worsening shock","Recovery","Pain response","Normal antibiotic effect"],a:[0],r:"This suggests progression from early septic shock into worsening hypoperfusion."},
-{q:"Which client should the nurse see first?",o:["Septic shock client now cold/clammy","Hypovolemic shock client UO 40 mL/hr","BP improved after dopamine","Hives improved after epi"],a:[0],r:"A change to cold/clammy skin in septic shock shows deterioration."},
-{q:"Highest risk for hypovolemic shock?",o:["Four days vomiting and diarrhea","Seasonal allergies","Stable hypertension","Healed incision"],a:[0],r:"Vomiting and diarrhea cause major fluid loss."},
-{q:"Which findings support anaphylactic shock? Select all that apply.",o:["Wheezing","Angioedema","Urticaria","Pruritus","Laryngeal edema"],a:[0,1,2,3,4],r:"Anaphylaxis includes airway swelling, wheezing, hives, itching, and edema."},
-{q:"Which position should be avoided in shock?",o:["Regular Trendelenburg","Semi-Fowler’s","Modified Trendelenburg","Position supporting breathing"],a:[0],r:"Your lecture says regular Trendelenburg should not be used for shock."},
-{q:"Which finding suggests poor kidney perfusion?",o:["Urine output 15 mL/hr","Urine output 60 mL/hr","Clear yellow urine","Thirst"],a:[0],r:"Low urine output means the kidneys are not being perfused."},
-{q:"pH 7.28 with elevated lactate in shock suggests:",o:["Anaerobic metabolism","Recovery","Improved perfusion","Normal finding"],a:[0],r:"Poor oxygen delivery causes anaerobic metabolism and lactic acidosis."},
-{q:"Which medications support circulation in shock? Select all that apply.",o:["Dopamine","Epinephrine","Norepinephrine","Metoprolol","Albumin"],a:[0,1,2,4],r:"Dopamine, epinephrine, norepinephrine, and albumin support circulation."},
-{q:"Which finding fits decompensated shock?",o:["Unconscious with anuria","Anxious with normal BP","Warm flushed skin","UO 45 mL/hr"],a:[0],r:"Decompensated shock includes unconsciousness, anuria, and organ failure signs."}
+  let mode = "study";
+let currentIndex = 0;
+let score = 0;
+let selected = [];
+let answered = false;
+let missed = [];
+let activeQuestions = [];
+
+function shuffleArray(arr){
+  const copy = [...arr];
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function prepareQuestions(){
+  return shuffleArray(QUESTION_BANK).map(q => {
+    if(q.type === "mc" || q.type === "sata"){
+      const mapped = q.options.map((text, originalIndex) => ({text, originalIndex}));
+      const shuffled = shuffleArray(mapped);
+      const newAnswer = shuffled
+        .map((item, newIndex) => q.answer.includes(item.originalIndex) ? newIndex : null)
+        .filter(x => x !== null);
+      return {...q, options: shuffled.map(x => x.text), answer: newAnswer};
+    }
+    return q;
+  });
+}
+
+function startGame(selectedMode){
+  mode = selectedMode;
+  currentIndex = 0;
+  score = 0;
+  selected = [];
+  answered = false;
+  missed = [];
+  activeQuestions = prepareQuestions();
+
+  homeScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
+  reviewScreen.classList.add("hidden");
+  gameScreen.classList.remove("hidden");
+
+  modeLabel.textContent = mode === "challenge" ? "🔥 Challenge Mode" : "📚 Study Mode";
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  selected = [];
+
+  const q = activeQuestions[currentIndex];
+
+  topicLabel.textContent = q.topic;
+  scoreLabel.textContent = `Score: ${score}/${currentIndex}`;
+  questionCount.textContent = `Question ${currentIndex + 1}/${activeQuestions.length}`;
+  progressBar.style.width = `${(currentIndex / activeQuestions.length) * 100}%`;
+
+  questionTitle.textContent = q.title;
+  questionStem.textContent = q.stem;
+  questionHint.textContent = getHint(q);
+
+  rationaleBox.classList.add("hidden");
+  rationaleBox.innerHTML = "";
+  submitBtn.classList.remove("hidden");
+  nextBtn.classList.add("hidden");
+
+  caseText.innerHTML = q.case ? `<div class="caseBox">${q.case}</div>` : "";
+
+  if(q.type === "mc" || q.type === "sata"){
+    renderOptions(q);
+  } else if(q.type === "matrix"){
+    renderMatrix(q);
+  } else if(q.type === "bowtie"){
+    renderBowtie(q);
+  }
+}
+
+function getHint(q){
+  if(q.type === "mc") return "Choose the best answer.";
+  if(q.type === "sata") return "Select all that apply.";
+  if(q.type === "matrix") return "Tap one choice per row.";
+  if(q.type === "bowtie") return "Select the condition, two actions, and two parameters to monitor.";
+  return "";
+}
+
+function renderOptions(q){
+  let html = "";
+  q.options.forEach((opt, i) => {
+    html += `<button class="option" id="opt${i}" onclick="toggleOption(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`;
+  });
+  answerArea.innerHTML = html;
+}
+
+function toggleOption(i){
+  if(answered) return;
+
+  const q = activeQuestions[currentIndex];
+
+  if(q.type === "mc"){
+    selected = [i];
+  } else {
+    if(selected.includes(i)){
+      selected = selected.filter(x => x !== i);
+    } else {
+      selected.push(i);
+    }
+  }
+
+  q.options.forEach((_, idx) => {
+    const el = document.getElementById("opt" + idx);
+    if(el) el.classList.toggle("selected", selected.includes(idx));
+  });
+}
+
+function arraysMatch(a,b){
+  const aa = [...a].sort((x,y)=>x-y);
+  const bb = [...b].sort((x,y)=>x-y);
+  return JSON.stringify(aa) === JSON.stringify(bb);
+}
+
+function submitAnswer(){
+  const q = activeQuestions[currentIndex];
+
+  if(q.type === "mc" || q.type === "sata"){
+    submitStandard(q);
+  } else if(q.type === "matrix"){
+    submitMatrix(q);
+  } else if(q.type === "bowtie"){
+    submitBowtie(q);
+  }
+}
+
+function submitStandard(q){
+  if(selected.length === 0){
+    alert("Pick an answer first 😭");
+    return;
+  }
+
+  answered = true;
+  const correct = arraysMatch(selected, q.answer);
+  if(correct) score++;
+  else missed.push({q, selected:[...selected]});
+
+  q.options.forEach((_, i) => {
+    const el = document.getElementById("opt" + i);
+    el.classList.remove("selected");
+    if(q.answer.includes(i)) el.classList.add("correct");
+    else if(selected.includes(i)) el.classList.add("wrong");
+  });
+
+  showRationale(correct, q.rationale);
+}
+
+function showRationale(correct, text){
+  rationaleBox.innerHTML = `<strong>${correct ? "✅ Correct" : "❌ Not quite"}</strong><br><br>${text}`;
+  rationaleBox.classList.remove("hidden");
+  submitBtn.classList.add("hidden");
+  nextBtn.classList.remove("hidden");
+  scoreLabel.textContent = `Score: ${score}/${currentIndex + 1}`;
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= activeQuestions.length){
+    endGame();
+  } else {
+    renderQuestion();
+  }
+}
+
+function endGame(){
+  gameScreen.classList.add("hidden");
+  resultScreen.classList.remove("hidden");
+
+  const pct = Math.round((score / activeQuestions.length) * 100);
+  finalScore.textContent = `${score}/${activeQuestions.length} (${pct}%)`;
+
+  if(pct >= 90) readiness.textContent = "A-Level Ready";
+  else if(pct >= 85) readiness.textContent = "Exam Ready";
+  else if(pct >= 75) readiness.textContent = "Close — Review";
+  else readiness.textContent = "Run It Again";
+
+  buildTopicBreakdown();
+}
+
+function buildTopicBreakdown(){
+  const topics = {};
+  activeQuestions.forEach(q => {
+    if(!topics[q.topic]) topics[q.topic] = {total:0, missed:0};
+    topics[q.topic].total++;
+  });
+
+  missed.forEach(m => {
+    if(topics[m.q.topic]) topics[m.q.topic].missed++;
+  });
+
+  let html = "";
+  Object.keys(topics).forEach(t => {
+    const item = topics[t];
+    const correct = item.total - item.missed;
+    html += `<div class="reviewItem"><strong>${t}</strong><br>${correct}/${item.total} correct</div>`;
+  });
+
+  topicBreakdown.innerHTML = html;
+}
+
+function restartApp(){
+  gameScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
+  reviewScreen.classList.add("hidden");
+  homeScreen.classList.remove("hidden");
+}
+
+function showReview(){
+  homeScreen.classList.add("hidden");
+  gameScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
+  reviewScreen.classList.remove("hidden");
+
+  if(missed.length === 0){
+    reviewList.innerHTML = "<p>No missed questions yet. Play a round first, or you got everything right.</p>";
+    return;
+  }
+
+  let html = "";
+  missed.forEach((m, i) => {
+    html += `<div class="reviewItem">
+      <strong>${i+1}. ${m.q.title}</strong>
+      <p>${m.q.stem}</p>
+      <p><strong>Rationale:</strong> ${m.q.rationale}</p>
+    </div>`;
+  });
+  reviewList.innerHTML = html;
+}
+  let matrixSelections = {};
+let bowtieSelections = {
+  condition:null,
+  actions:[],
+  monitoring:[]
+};
+
+function renderMatrix(q){
+  matrixSelections = {};
+
+  let html = `<div class="tableWrap"><table class="matrix">
+    <tr>
+      <th>Finding</th>`;
+
+  q.columns.forEach(col => {
+    html += `<th>${col}</th>`;
+  });
+
+  html += `</tr>`;
+
+  q.rows.forEach((row, rowIndex) => {
+    html += `<tr><td>${row.finding}</td>`;
+    q.columns.forEach((col, colIndex) => {
+      html += `<td><button id="m_${rowIndex}_${colIndex}" onclick="selectMatrix(${rowIndex},${colIndex})">Select</button></td>`;
+    });
+    html += `</tr>`;
+  });
+
+  html += `</table></div>`;
+  answerArea.innerHTML = html;
+}
+
+function selectMatrix(rowIndex, colIndex){
+  if(answered) return;
+
+  const q = activeQuestions[currentIndex];
+  matrixSelections[rowIndex] = colIndex;
+
+  q.columns.forEach((_, i) => {
+    const el = document.getElementById(`m_${rowIndex}_${i}`);
+    if(el) el.classList.remove("selected");
+  });
+
+  const chosen = document.getElementById(`m_${rowIndex}_${colIndex}`);
+  if(chosen) chosen.classList.add("selected");
+}
+
+function submitMatrix(q){
+  if(Object.keys(matrixSelections).length !== q.rows.length){
+    alert("Answer every row first 😭");
+    return;
+  }
+
+  answered = true;
+  let correct = true;
+
+  q.rows.forEach((row, rowIndex) => {
+    const selectedCol = matrixSelections[rowIndex];
+    const correctCol = row.answer;
+
+    q.columns.forEach((_, colIndex) => {
+      const el = document.getElementById(`m_${rowIndex}_${colIndex}`);
+      if(!el) return;
+
+      if(colIndex === correctCol){
+        el.classList.add("correct");
+      } else if(colIndex === selectedCol){
+        el.classList.add("wrong");
+      }
+
+      el.classList.add("locked");
+    });
+
+    if(selectedCol !== correctCol) correct = false;
+  });
+
+  if(correct) score++;
+  else missed.push({q, selected:{...matrixSelections}});
+
+  showRationale(correct, q.rationale);
+}
+
+function renderBowtie(q){
+  bowtieSelections = {
+    condition:null,
+    actions:[],
+    monitoring:[]
+  };
+
+  let html = `<div class="bowtie">`;
+
+  html += `<div class="dropZone">
+    <h3>Condition</h3>`;
+  q.conditionOptions.forEach((opt, i) => {
+    html += `<button class="choicePill" id="bt_condition_${i}" onclick="selectBowtie('condition',${i})">${opt}</button>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="dropZone">
+    <h3>Priority Actions</h3>
+    <p class="small">Choose two.</p>`;
+  q.actionOptions.forEach((opt, i) => {
+    html += `<button class="choicePill" id="bt_actions_${i}" onclick="selectBowtie('actions',${i})">${opt}</button>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="dropZone">
+    <h3>Parameters to Monitor</h3>
+    <p class="small">Choose two.</p>`;
+  q.monitorOptions.forEach((opt, i) => {
+    html += `<button class="choicePill" id="bt_monitoring_${i}" onclick="selectBowtie('monitoring',${i})">${opt}</button>`;
+  });
+  html += `</div>`;
+
+  html += `</div>`;
+  answerArea.innerHTML = html;
+}
+
+function selectBowtie(group, index){
+  if(answered) return;
+
+  if(group === "condition"){
+    bowtieSelections.condition = index;
+    const q = activeQuestions[currentIndex];
+    q.conditionOptions.forEach((_, i) => {
+      const el = document.getElementById(`bt_condition_${i}`);
+      if(el) el.classList.toggle("selected", i === index);
+    });
+    return;
+  }
+
+  const limit = 2;
+  const key = group;
+
+  if(bowtieSelections[key].includes(index)){
+    bowtieSelections[key] = bowtieSelections[key].filter(x => x !== index);
+  } else {
+    if(bowtieSelections[key].length >= limit){
+      alert("Choose only two for this section.");
+      return;
+    }
+    bowtieSelections[key].push(index);
+  }
+
+  const prefix = group === "actions" ? "bt_actions_" : "bt_monitoring_";
+  const options = group === "actions"
+    ? activeQuestions[currentIndex].actionOptions
+    : activeQuestions[currentIndex].monitorOptions;
+
+  options.forEach((_, i) => {
+    const el = document.getElementById(prefix + i);
+    if(el) el.classList.toggle("selected", bowtieSelections[key].includes(i));
+  });
+}
+
+function submitBowtie(q){
+  if(
+    bowtieSelections.condition === null ||
+    bowtieSelections.actions.length !== 2 ||
+    bowtieSelections.monitoring.length !== 2
+  ){
+    alert("Finish the bow-tie first: one condition, two actions, two monitoring items.");
+    return;
+  }
+
+  answered = true;
+
+  const conditionCorrect = bowtieSelections.condition === q.answer.condition;
+  const actionsCorrect = arraysMatch(bowtieSelections.actions, q.answer.actions);
+  const monitoringCorrect = arraysMatch(bowtieSelections.monitoring, q.answer.monitoring);
+
+  const correct = conditionCorrect && actionsCorrect && monitoringCorrect;
+
+  q.conditionOptions.forEach((_, i) => {
+    const el = document.getElementById(`bt_condition_${i}`);
+    if(i === q.answer.condition) el.classList.add("correct");
+    else if(i === bowtieSelections.condition) el.classList.add("wrong");
+    el.classList.add("locked");
+  });
+
+  q.actionOptions.forEach((_, i) => {
+    const el = document.getElementById(`bt_actions_${i}`);
+    if(q.answer.actions.includes(i)) el.classList.add("correct");
+    else if(bowtieSelections.actions.includes(i)) el.classList.add("wrong");
+    el.classList.add("locked");
+  });
+
+  q.monitorOptions.forEach((_, i) => {
+    const el = document.getElementById(`bt_monitoring_${i}`);
+    if(q.answer.monitoring.includes(i)) el.classList.add("correct");
+    else if(bowtieSelections.monitoring.includes(i)) el.classList.add("wrong");
+    el.classList.add("locked");
+  });
+
+  if(correct) score++;
+  else missed.push({q, selected:{...bowtieSelections}});
+
+  showRationale(correct, q.rationale);
+}
+  const QUESTION_BANK = [
+{
+  type:"mc",
+  topic:"Compensated Shock",
+  title:"Normal BP Trap",
+  stem:"A client has BP 118/74, HR 132, RR 30, cool clammy skin, and says, “I feel like something bad is about to happen.” Which interpretation is most accurate?",
+  options:[
+    "The client is stable because the blood pressure is normal.",
+    "The client is showing signs of compensated shock.",
+    "The client is in decompensated shock.",
+    "The client is experiencing septic shock only."
+  ],
+  answer:[1],
+  rationale:"Normal BP does not rule out shock. Tachycardia, tachypnea, anxiety/impending doom, and cool clammy skin indicate compensated shock."
+},
+{
+  type:"sata",
+  topic:"Progressive Shock",
+  title:"Worsening Perfusion",
+  stem:"Which findings suggest the client is moving from compensated shock into progressive shock? Select all that apply.",
+  options:[
+    "New confusion",
+    "Urine output 15 mL/hr",
+    "SBP 84 mmHg",
+    "Metabolic acidosis",
+    "Normal bowel sounds",
+    "Anxiety with normal blood pressure"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Progressive shock shows failed compensation: hypotension, confusion, decreased urine output, decreased perfusion, and acidosis."
+},
+{
+  type:"mc",
+  topic:"Priority",
+  title:"First Action",
+  stem:"A nurse suspects a client is developing shock. What is the priority nursing action?",
+  options:[
+    "Begin the primary survey using ABCDE.",
+    "Insert a Foley catheter.",
+    "Ask the family for a complete history.",
+    "Wait for laboratory confirmation."
+  ],
+  answer:[0],
+  rationale:"Shock is life-threatening. The nurse first performs a rapid ABCDE primary survey and corrects immediate threats."
+},
+{
+  type:"mc",
+  topic:"Septic Shock",
+  title:"Warm to Cold",
+  case:"0900: Client with sepsis has warm flushed skin, HR 118, BP 104/66. 1100: Client is cool, clammy, confused, BP 82/44, UO 12 mL/hr.",
+  stem:"What does this change most likely indicate?",
+  options:[
+    "The client is improving after treatment.",
+    "The client is progressing to worsening shock.",
+    "The client has developed chronic pain.",
+    "The client is experiencing a normal fever response."
+  ],
+  answer:[1],
+  rationale:"Early septic shock may be warm and flushed. Cool clammy skin, confusion, hypotension, and low urine output show worsening hypoperfusion."
+},
+{
+  type:"mc",
+  topic:"Anaphylactic Shock",
+  title:"Epinephrine First",
+  case:"A client receiving IV antibiotics suddenly develops wheezing, hives, tongue swelling, and BP 78/40.",
+  stem:"Which medication should the nurse anticipate first?",
+  options:[
+    "Diphenhydramine",
+    "Epinephrine",
+    "Prednisone",
+    "Acetaminophen"
+  ],
+  answer:[1],
+  rationale:"Anaphylaxis threatens airway and circulation. Epinephrine is the priority medication."
+},
+{
+  type:"sata",
+  topic:"Anaphylactic Shock",
+  title:"Airway Allergy Clues",
+  stem:"Which findings support anaphylactic shock? Select all that apply.",
+  options:[
+    "Wheezing",
+    "Angioedema",
+    "Urticaria",
+    "Pruritus",
+    "Laryngeal edema",
+    "Frothy sputum from CHF"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Anaphylaxis causes airway swelling and allergic manifestations such as wheezing, angioedema, hives, itching, and laryngeal edema."
+},
+{
+  type:"mc",
+  topic:"Cardiogenic Shock",
+  title:"Question the Fluids",
+  case:"A client with suspected cardiogenic shock has crackles, frothy sputum, JVD, and generalized edema.",
+  stem:"Which provider order should the nurse question?",
+  options:[
+    "Administer oxygen.",
+    "Place the client on cardiac monitoring.",
+    "Give a rapid 2 L NS bolus without reassessment.",
+    "Notify the provider of worsening respiratory status."
+  ],
+  answer:[2],
+  rationale:"Cardiogenic shock is pump failure. Excessive fluids can worsen pulmonary edema."
+},
+{
+  type:"sata",
+  topic:"Cardiogenic Shock",
+  title:"Pump Failure Findings",
+  stem:"Which findings support cardiogenic shock? Select all that apply.",
+  options:[
+    "Crackles",
+    "Frothy sputum",
+    "JVD",
+    "Generalized edema",
+    "Severe diarrhea",
+    "External hemorrhage"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Cardiogenic shock is associated with heart pump failure and CHF-like findings: crackles, frothy sputum, JVD, and edema."
+},
+    {
+  type:"mc",
+  topic:"Obstructive Shock",
+  title:"Tension Pneumothorax Pattern",
+  case:"A client arrives after chest trauma. Assessment: absent breath sounds on the left, tracheal deviation to the right, JVD, severe dyspnea, and BP 74/42.",
+  stem:"Which type of shock is most likely?",
+  options:[
+    "Hypovolemic shock",
+    "Obstructive shock",
+    "Septic shock",
+    "Neurogenic shock"
+  ],
+  answer:[1],
+  rationale:"Tension pneumothorax can obstruct venous return and cause obstructive shock. Key clues are absent breath sounds, tracheal deviation, JVD, dyspnea, and hypotension."
+},
+{
+  type:"mc",
+  topic:"Obstructive Shock",
+  title:"Tamponade Treatment",
+  case:"A client has chest trauma with muffled heart sounds, JVD, and hypotension.",
+  stem:"Which provider intervention should the nurse anticipate?",
+  options:[
+    "Pericardiocentesis",
+    "Diphenhydramine",
+    "Oral fluids",
+    "Routine discharge teaching"
+  ],
+  answer:[0],
+  rationale:"Muffled heart sounds, JVD, and hypotension suggest cardiac tamponade. The expected treatment is pericardiocentesis."
+},
+{
+  type:"mc",
+  topic:"Neurogenic Shock",
+  title:"Odd Shock Finding",
+  stem:"Which finding best helps the nurse distinguish neurogenic shock from most other types of shock?",
+  options:[
+    "Hypotension with bradycardia",
+    "Hypotension with tachycardia",
+    "Fever and warm flushed skin",
+    "External bleeding"
+  ],
+  answer:[0],
+  rationale:"Most shock states cause tachycardia. Neurogenic shock is the odd one because loss of sympathetic tone can cause hypotension with bradycardia."
+},
+{
+  type:"sata",
+  topic:"General Shock Care",
+  title:"Universal Shock Actions",
+  stem:"Which actions are appropriate for most clients suspected of shock? Select all that apply.",
+  options:[
+    "Administer oxygen",
+    "Establish large-bore IV access",
+    "Start NS or LR initially",
+    "Monitor urine output",
+    "Place in regular Trendelenburg",
+    "Treat the underlying cause"
+  ],
+  answer:[0,1,2,3,5],
+  rationale:"General shock care includes oxygen, large-bore IV access, isotonic fluids such as NS or LR, urine output monitoring, and treating the underlying cause. Regular Trendelenburg should not be used."
+},
+{
+  type:"mc",
+  topic:"Fluids and Blood",
+  title:"Initial Fluid Choice",
+  stem:"A client is suspected of being in shock, but the cause has not been identified yet. Which IV fluid is most appropriate initially?",
+  options:[
+    "D5W",
+    "Normal saline or lactated Ringer’s",
+    "TPN",
+    "0.45% sodium chloride only"
+  ],
+  answer:[1],
+  rationale:"The shock lecture emphasizes NS or LR initially until the cause of shock is established."
+},
+{
+  type:"mc",
+  topic:"Fluids and Blood",
+  title:"Blood Compatibility",
+  stem:"A hemorrhaging client is receiving blood products. Which fluid should be used with the blood transfusion?",
+  options:[
+    "Normal saline",
+    "D5W",
+    "Lactated Ringer’s",
+    "0.45% sodium chloride"
+  ],
+  answer:[0],
+  rationale:"Blood products are administered with normal saline."
+},
+{
+  type:"mc",
+  topic:"Fluids and Blood",
+  title:"Universal Donor",
+  stem:"A client needs emergency blood before type-specific blood is available. Which blood type is the universal donor?",
+  options:[
+    "O negative",
+    "AB positive",
+    "A positive",
+    "B negative"
+  ],
+  answer:[0],
+  rationale:"O negative blood is considered the universal donor for emergency transfusion."
+},
+{
+  type:"mc",
+  topic:"Albumin",
+  title:"Albumin Magnet",
+  stem:"The nurse explains albumin therapy to a student nurse. Which statement is accurate?",
+  options:[
+    "Albumin replaces red blood cells.",
+    "Albumin pulls fluid from tissues into the bloodstream.",
+    "Albumin directly kills bacteria.",
+    "Albumin lowers blood pressure."
+  ],
+  answer:[1],
+  rationale:"Albumin increases oncotic pressure and pulls fluid from tissues back into the intravascular space, helping support blood pressure."
+},
+{
+  type:"sata",
+  topic:"Labs and Complications",
+  title:"Shock Labs",
+  stem:"Which laboratory findings are concerning in a client with shock? Select all that apply.",
+  options:[
+    "pH 7.28",
+    "Elevated lactate",
+    "Platelets 40,000/mm³",
+    "Elevated PT/INR",
+    "Urine output 50 mL/hr",
+    "Metabolic acidosis"
+  ],
+  answer:[0,1,2,3,5],
+  rationale:"Shock can cause lactic acidosis from anaerobic metabolism and DIC with abnormal coagulation and low platelets. Urine output 50 mL/hr is not the concerning option."
+},
+{
+  type:"mc",
+  topic:"Labs and Complications",
+  title:"DIC Warning",
+  case:"A client in shock begins bleeding from IV sites and has petechiae.",
+  stem:"Which labs should the nurse expect to monitor closely?",
+  options:[
+    "PT/INR, PTT, CBC with platelets",
+    "A1C and fasting glucose",
+    "Amylase and lipase",
+    "Calcium and magnesium only"
+  ],
+  answer:[0],
+  rationale:"Shock can lead to DIC. Coagulation studies and platelets are priority labs when bleeding occurs."
+},
+   {
+  type:"matrix",
+  topic:"NGN Matrix",
+  title:"Classify Shock Stages",
+  stem:"Classify each finding by the shock stage it most strongly matches.",
+  columns:["Compensated","Progressive","Decompensated"],
+  rows:[
+    {finding:"Anxious, restless, feeling of impending doom",answer:0},
+    {finding:"Normal blood pressure with tachycardia",answer:0},
+    {finding:"Confusion with SBP less than 90",answer:1},
+    {finding:"Urine output 15 mL/hr",answer:1},
+    {finding:"Unconscious with anuria",answer:2},
+    {finding:"Cyanotic, mottled skin",answer:2}
+  ],
+  rationale:"Compensated shock still maintains blood pressure through SNS stimulation. Progressive shock shows falling BP, confusion, and decreased urine output. Decompensated shock shows severe organ failure signs such as unconsciousness, anuria, cyanosis, and mottling."
+},
+{
+  type:"matrix",
+  topic:"NGN Matrix",
+  title:"Match Shock Type to Clues",
+  stem:"For each cue, identify the most likely type of shock.",
+  columns:["Hypovolemic","Cardiogenic","Distributive","Obstructive"],
+  rows:[
+    {finding:"Four days of vomiting and diarrhea",answer:0},
+    {finding:"Crackles, frothy sputum, JVD",answer:1},
+    {finding:"Warm flushed skin with infection",answer:2},
+    {finding:"Wheezing, hives, tongue swelling",answer:2},
+    {finding:"Absent breath sounds with tracheal deviation",answer:3},
+    {finding:"Muffled heart sounds after chest trauma",answer:3}
+  ],
+  rationale:"Hypovolemic shock is volume loss. Cardiogenic shock is pump failure. Distributive shock includes septic and anaphylactic shock. Obstructive shock includes tamponade and tension pneumothorax."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Anaphylactic Shock Bow-Tie",
+  case:"A client develops wheezing, tongue swelling, hives, and BP 76/40 after receiving IV contrast. The client is restless and says, “I can’t breathe.”",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Anaphylactic shock",
+    "Cardiogenic shock",
+    "Hypovolemic shock",
+    "Neurogenic shock"
+  ],
+  actionOptions:[
+    "Administer epinephrine",
+    "Prepare oxygen/airway support",
+    "Give furosemide",
+    "Place client in regular Trendelenburg",
+    "Encourage oral fluids"
+  ],
+  monitorOptions:[
+    "Airway swelling",
+    "Blood pressure response",
+    "Bowel sounds only",
+    "Blood glucose only",
+    "Daily weight only"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Anaphylactic shock is life-threatening airway/circulation collapse. Priority actions are epinephrine and oxygen/airway support. Monitor airway swelling and blood pressure response."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Tension Pneumothorax Bow-Tie",
+  case:"A client arrives after a stab wound to the chest. Findings: absent breath sounds on the right, tracheal shift to the left, JVD, severe dyspnea, and BP 78/46.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Obstructive shock from tension pneumothorax",
+    "Septic shock",
+    "Neurogenic shock",
+    "Hypoglycemia"
+  ],
+  actionOptions:[
+    "Prepare for chest tube or needle decompression per provider protocol",
+    "Apply oxygen",
+    "Administer diphenhydramine first",
+    "Encourage ambulation",
+    "Give oral fluids"
+  ],
+  monitorOptions:[
+    "Breath sounds",
+    "Blood pressure/perfusion",
+    "Rash improvement",
+    "Bowel movement frequency",
+    "Appetite"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Tension pneumothorax can cause obstructive shock. Priority actions include oxygen and preparing for emergency decompression/chest tube. Monitor breath sounds and perfusion."
+},
+{
+  type:"mc",
+  topic:"NGN Case Study",
+  title:"Recognize Cues: GI Fluid Loss",
+  case:"Nurse Notes: A 72-year-old client reports vomiting and diarrhea for 4 days. Assessment: BP 92/56, HR 138, RR 30, cool clammy skin, dry mucous membranes, weak peripheral pulses, urine output 18 mL/hr.",
+  stem:"Which cue is most concerning and indicates poor organ perfusion?",
+  options:[
+    "Dry mucous membranes",
+    "Urine output 18 mL/hr",
+    "Reports diarrhea",
+    "Respiratory rate 30/min"
+  ],
+  answer:[1],
+  rationale:"All findings matter, but urine output 18 mL/hr directly shows poor kidney perfusion and worsening shock."
+},
+{
+  type:"sata",
+  topic:"NGN Case Study",
+  title:"Recognize Cues: Hypovolemic Shock",
+  case:"A client has had vomiting and diarrhea for 4 days. BP 92/56, HR 138, RR 30, cool clammy skin, weak pulses, dry mucous membranes, and urine output 18 mL/hr.",
+  stem:"Which cues support hypovolemic shock? Select all that apply.",
+  options:[
+    "Vomiting and diarrhea for 4 days",
+    "Dry mucous membranes",
+    "Cool clammy skin",
+    "Urine output 18 mL/hr",
+    "Frothy sputum",
+    "JVD"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Vomiting/diarrhea and dry mucous membranes suggest volume loss. Cool clammy skin and low urine output support shock. Frothy sputum and JVD point more toward cardiogenic shock."
+},
+{
+  type:"mc",
+  topic:"NGN Case Study",
+  title:"Analyze Cues: Best Hypothesis",
+  case:"A client has vomiting/diarrhea x4 days, BP 92/56, HR 138, RR 30, cool clammy skin, dry mucous membranes, weak pulses, and urine output 18 mL/hr.",
+  stem:"Which hypothesis is the priority?",
+  options:[
+    "Hypovolemic shock related to fluid volume loss",
+    "Cardiogenic shock related to pump failure",
+    "Anaphylactic shock related to allergen exposure",
+    "Neurogenic shock related to spinal cord injury"
+  ],
+  answer:[0],
+  rationale:"The cause is fluid loss from vomiting and diarrhea, making hypovolemic shock the priority hypothesis."
+},
+{
+  type:"mc",
+  topic:"NGN Case Study",
+  title:"Take Action: Hypovolemic Shock",
+  case:"The client with suspected hypovolemic shock has BP 88/52, HR 142, UO 15 mL/hr, and cool clammy skin.",
+  stem:"Which action should the nurse anticipate first?",
+  options:[
+    "Prepare to administer NS or LR through large-bore IV access",
+    "Restrict all fluids",
+    "Administer furosemide",
+    "Place the client in regular Trendelenburg"
+  ],
+  answer:[0],
+  rationale:"Hypovolemic shock requires volume support with isotonic fluids such as NS or LR and correction of the underlying fluid loss."
+},
+{
+  type:"mc",
+  topic:"NGN Case Study",
+  title:"Evaluate Outcomes: Hypovolemic Shock",
+  case:"A client with hypovolemic shock receives isotonic fluids. Current assessment: BP increased from 88/52 to 106/66, HR decreased from 142 to 112, urine output increased from 15 to 35 mL/hr, and skin is warmer.",
+  stem:"How should the nurse interpret these findings?",
+  options:[
+    "Perfusion is improving",
+    "The client is developing decompensated shock",
+    "The client is showing fluid overload only",
+    "The client needs immediate diuretics"
+  ],
+  answer:[0],
+  rationale:"Improving BP, lower HR, increased urine output, and warmer skin indicate improved perfusion."
+},
+{
+  type:"matrix",
+  topic:"NGN Case Study",
+  title:"Evaluate Hypovolemic Shock Outcomes",
+  stem:"Classify each finding after treatment as improving or worsening.",
+  columns:["Improving","Worsening"],
+  rows:[
+    {finding:"Urine output increases from 15 to 35 mL/hr",answer:0},
+    {finding:"Blood pressure drops from 92/56 to 78/42",answer:1},
+    {finding:"Client becomes more alert",answer:0},
+    {finding:"Skin changes from cool clammy to mottled",answer:1},
+    {finding:"Heart rate decreases from 142 to 108",answer:0}
+  ],
+  rationale:"Improving perfusion shows rising urine output, improved alertness, warmer skin, and lower compensatory tachycardia. Worsening shock shows falling BP and mottling."
+},
+ {
+  type:"mc",
+  topic:"Trend Analysis",
+  title:"Most Concerning Trend",
+  case:"0900: BP 110/70, HR 118, RR 24, UO 40 mL/hr, anxious. 1100: BP 96/58, HR 136, RR 30, UO 22 mL/hr, restless. 1300: BP 82/44, HR 152, RR 34, UO 10 mL/hr, confused.",
+  stem:"Which trend is most concerning?",
+  options:[
+    "The client remains anxious.",
+    "The client’s urine output is progressively decreasing.",
+    "The client’s respiratory rate increased slightly.",
+    "The client has remained awake."
+  ],
+  answer:[1],
+  rationale:"Progressively decreasing urine output is a strong sign of worsening renal perfusion and progressive shock."
+},
+{
+  type:"sata",
+  topic:"Trend Analysis",
+  title:"Evidence of Deterioration",
+  case:"0900: BP 110/70, HR 118, UO 40 mL/hr. 1300: BP 82/44, HR 152, UO 10 mL/hr, confused, cool clammy skin.",
+  stem:"Which findings show deterioration? Select all that apply.",
+  options:[
+    "BP decreased to 82/44",
+    "HR increased to 152",
+    "Urine output decreased to 10 mL/hr",
+    "New confusion",
+    "Cool clammy skin",
+    "Earlier urine output was 40 mL/hr"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Falling BP, rising HR, severely decreased urine output, confusion, and cool clammy skin show worsening shock."
+},
+{
+  type:"mc",
+  topic:"Provider Orders",
+  title:"Question the Order",
+  case:"A client is in cardiogenic shock with crackles, frothy sputum, JVD, and oxygen saturation 88%.",
+  stem:"Which order should the nurse question?",
+  options:[
+    "Administer oxygen.",
+    "Place the client on continuous cardiac monitoring.",
+    "Prepare for possible cardiac catheterization.",
+    "Administer a rapid 2,000 mL NS bolus without reassessment."
+  ],
+  answer:[3],
+  rationale:"Large rapid fluid boluses can worsen pulmonary edema in cardiogenic shock. The other orders support oxygenation and cardiac evaluation."
+},
+{
+  type:"mc",
+  topic:"Provider Orders",
+  title:"Septic Shock Timing",
+  case:"A client has suspected septic shock. Temperature 103°F, WBC elevated, BP 86/48, HR 140. Provider orders blood cultures and broad-spectrum antibiotics.",
+  stem:"Which action is best?",
+  options:[
+    "Give antibiotics immediately and skip cultures.",
+    "Obtain cultures as ordered, then administer broad-spectrum antibiotics promptly.",
+    "Wait until the client is afebrile before antibiotics.",
+    "Hold antibiotics until the specific organism is known."
+  ],
+  answer:[1],
+  rationale:"For suspected sepsis, cultures are obtained before antibiotics when possible, but antibiotics should not be delayed unnecessarily."
+},
+{
+  type:"matrix",
+  topic:"Provider Orders",
+  title:"Appropriate vs Question",
+  stem:"For each order, classify whether it is appropriate or should be questioned.",
+  columns:["Appropriate","Question"],
+  rows:[
+    {finding:"Epinephrine for anaphylactic shock with airway swelling",answer:0},
+    {finding:"Regular Trendelenburg for shock",answer:1},
+    {finding:"NS or LR initially for undifferentiated shock",answer:0},
+    {finding:"Rapid large fluid bolus in cardiogenic shock with pulmonary edema and no reassessment",answer:1},
+    {finding:"Monitor urine output in shock",answer:0},
+    {finding:"Ignore underlying cause once BP improves",answer:1}
+  ],
+  rationale:"ATI loves orders that sound familiar but are unsafe in context. Epinephrine, isotonic fluids when appropriate, and urine monitoring are correct. Regular Trendelenburg, careless fluids in cardiogenic shock, and ignoring the cause are unsafe."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Cardiogenic Shock Bow-Tie",
+  case:"A client with chest pain becomes hypotensive. Assessment: crackles, frothy sputum, JVD, generalized edema, HR 132, BP 82/50, SpO2 88%.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Cardiogenic shock",
+    "Hypovolemic shock",
+    "Neurogenic shock",
+    "Anaphylactic shock"
+  ],
+  actionOptions:[
+    "Administer oxygen",
+    "Place on continuous cardiac monitoring",
+    "Give rapid 2 L NS bolus without reassessment",
+    "Encourage oral fluids",
+    "Ambulate in hallway"
+  ],
+  monitorOptions:[
+    "Lung sounds/oxygenation",
+    "Blood pressure/perfusion",
+    "Rash and itching only",
+    "Bowel movement frequency",
+    "Appetite"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Cardiogenic shock is pump failure. Oxygen and cardiac monitoring are priorities. Monitor lung sounds, oxygenation, blood pressure, and perfusion. Avoid careless large-volume fluids."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Septic Shock Bow-Tie",
+  case:"A client with pneumonia has fever, elevated WBC, warm flushed skin, HR 124, BP 92/56, and confusion. Two hours later the client becomes cool and clammy with UO 14 mL/hr.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Septic shock",
+    "Hypovolemic shock from bleeding",
+    "Cardiac tamponade",
+    "Opioid overdose"
+  ],
+  actionOptions:[
+    "Obtain cultures if ordered and administer broad-spectrum antibiotics promptly",
+    "Administer IV fluids as prescribed",
+    "Give diphenhydramine first",
+    "Restrict all fluids",
+    "Ignore urine output"
+  ],
+  monitorOptions:[
+    "Temperature/WBC and infection response",
+    "Blood pressure and urine output",
+    "Hives only",
+    "Chest tube drainage",
+    "Blood glucose only"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Septic shock is distributive shock caused by infection. Treatment includes cultures when ordered, prompt antibiotics, fluids, and close monitoring of infection response, BP, and urine output."
+},
+{
+  type:"mc",
+  topic:"Priority",
+  title:"Who to See First",
+  stem:"Which client should the nurse assess first?",
+  options:[
+    "Client with hypovolemic shock whose urine output increased from 15 to 40 mL/hr",
+    "Client with septic shock whose skin changed from warm/flushed to cold/clammy",
+    "Client with anaphylaxis whose hives improved after epinephrine",
+    "Client with cardiogenic shock whose BP improved after medication"
+  ],
+  answer:[1],
+  rationale:"Warm/flushed septic shock becoming cold/clammy indicates deterioration. The other clients show improvement."
+},
+{
+  type:"mc",
+  topic:"Priority",
+  title:"Brain Perfusion",
+  stem:"Which finding requires the most immediate intervention in a client at risk for shock?",
+  options:[
+    "Anxiety",
+    "Heart rate 112/min",
+    "New confusion",
+    "Pain rated 6/10"
+  ],
+  answer:[2],
+  rationale:"New confusion indicates decreased cerebral perfusion and worsening shock."
+},
+{
+  type:"sata",
+  topic:"Decompensated Shock",
+  title:"Late Shock Cues",
+  stem:"Which findings suggest decompensated shock? Select all that apply.",
+  options:[
+    "Unconsciousness",
+    "Anuria",
+    "Cyanotic mottled skin",
+    "SBP less than 60",
+    "Normal urine output",
+    "Mild anxiety with normal BP"
+  ],
+  answer:[0,1,2,3],
+  rationale:"Decompensated shock is late and severe: unconsciousness, anuria, cyanosis/mottling, very low SBP, and organ failure."
+},
+    {
+  type:"matrix",
+  topic:"ATI Clinical Judgment",
+  title:"Recognize vs Analyze vs Act",
+  stem:"Classify each nursing thought/action in the clinical judgment process.",
+  columns:["Recognize Cues","Analyze Cues","Take Action"],
+  rows:[
+    {finding:"Client has HR 152, BP 82/44, UO 10 mL/hr",answer:0},
+    {finding:"Low urine output means poor kidney perfusion",answer:1},
+    {finding:"Start oxygen and prepare isotonic fluids as prescribed",answer:2},
+    {finding:"Warm flushed skin changed to cool clammy skin",answer:0},
+    {finding:"Change suggests worsening septic shock",answer:1},
+    {finding:"Notify RN/provider of deterioration",answer:2}
+  ],
+  rationale:"Recognize cues means noticing data. Analyze cues means interpreting what the data means. Take action means doing the priority intervention."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Hypovolemic Shock Bow-Tie",
+  case:"A 70-year-old client has had vomiting and diarrhea for 4 days. BP 86/48, HR 146, RR 32, UO 12 mL/hr, dry mucous membranes, cool clammy skin, weak pulses.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Hypovolemic shock",
+    "Cardiogenic shock",
+    "Neurogenic shock",
+    "Anaphylactic shock"
+  ],
+  actionOptions:[
+    "Establish large-bore IV access",
+    "Administer NS or LR as prescribed",
+    "Give furosemide first",
+    "Restrict all fluids",
+    "Administer diphenhydramine first"
+  ],
+  monitorOptions:[
+    "Urine output",
+    "Blood pressure and heart rate",
+    "Hives and itching only",
+    "Frothy sputum only",
+    "Pupil reaction only"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Vomiting and diarrhea cause volume loss. Hypovolemic shock priorities include large-bore IV access, isotonic fluids, and monitoring BP/HR and urine output."
+},
+{
+  type:"mc",
+  topic:"Clinical Judgment",
+  title:"Most Important Cue",
+  case:"Client A: HR 122, anxious, BP 118/70. Client B: HR 148, BP 86/44, UO 10 mL/hr, confused. Client C: warm flushed skin, fever, BP 106/62. Client D: pain 8/10 after surgery, BP 130/80.",
+  stem:"Which client has the most urgent cue cluster?",
+  options:[
+    "Client A",
+    "Client B",
+    "Client C",
+    "Client D"
+  ],
+  answer:[1],
+  rationale:"Client B has hypotension, severe tachycardia, low urine output, and confusion, indicating poor perfusion and progressive shock."
+},
+{
+  type:"sata",
+  topic:"Clinical Judgment",
+  title:"Cues Requiring Escalation",
+  stem:"Which findings should the nurse escalate immediately in a client with suspected shock? Select all that apply.",
+  options:[
+    "New confusion",
+    "Urine output 8 mL/hr",
+    "SBP 78 mmHg",
+    "Mottled skin",
+    "Heart rate 154/min",
+    "Pain improved from 8/10 to 4/10"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Confusion, severely decreased urine output, hypotension, mottling, and extreme tachycardia all indicate worsening perfusion. Improved pain is not the urgent cue."
+},
+{
+  type:"matrix",
+  topic:"Shock Type Comparison",
+  title:"Expected Treatment Match",
+  stem:"Match the likely treatment/intervention with the shock scenario.",
+  columns:["Hypovolemic","Cardiogenic","Anaphylactic","Obstructive"],
+  rows:[
+    {finding:"Blood products and control bleeding",answer:0},
+    {finding:"Question rapid large-volume fluids with pulmonary edema",answer:1},
+    {finding:"Epinephrine first",answer:2},
+    {finding:"Chest tube or decompression for tension pneumothorax",answer:3},
+    {finding:"Pericardiocentesis for tamponade",answer:3},
+    {finding:"Treat MI/pump failure",answer:1}
+  ],
+  rationale:"Hypovolemic shock needs volume replacement and source control. Cardiogenic shock needs pump support and careful fluids. Anaphylaxis needs epinephrine. Obstructive shock requires removal of the obstruction."
+},
+{
+  type:"mc",
+  topic:"Professor Trap",
+  title:"Trendelenburg Trap",
+  stem:"A student nurse suggests placing a client in regular Trendelenburg for shock. What is the best response?",
+  options:[
+    "Correct, it is the preferred position for all shock clients.",
+    "Incorrect, regular Trendelenburg should not be used for shock.",
+    "Correct, it replaces IV fluids.",
+    "Incorrect, shock clients must always lie prone."
+  ],
+  answer:[1],
+  rationale:"The lecture specifically states regular Trendelenburg should not be used for shock. Positioning should support ABCs, such as semi-Fowler’s for breathing problems or modified Trendelenburg when appropriate."
+},
+{
+  type:"mc",
+  topic:"Professor Trap",
+  title:"Blood Pressure Trap",
+  stem:"Which statement by a student nurse shows the need for further teaching?",
+  options:[
+    "A client can be in compensated shock with a normal blood pressure.",
+    "Hypotension is a late sign of shock.",
+    "Shock can progress rapidly and become fatal.",
+    "A normal blood pressure rules out shock."
+  ],
+  answer:[3],
+  rationale:"A normal BP does not rule out shock. In compensated shock, SNS stimulation may maintain BP temporarily."
+},
+{
+  type:"sata",
+  topic:"Professor Trap",
+  title:"Believable but Wrong",
+  stem:"Which statements about shock are correct? Select all that apply.",
+  options:[
+    "Shock is inadequate tissue perfusion.",
+    "Shock can be fatal without rapid treatment.",
+    "Shock always begins with severe hypotension.",
+    "The underlying cause must be treated.",
+    "Urine output is an important perfusion indicator.",
+    "All shock types should receive large fluid boluses without reassessment."
+  ],
+  answer:[0,1,3,4],
+  rationale:"Shock is poor perfusion and can be fatal. Treating the underlying cause and monitoring urine output are essential. Severe hypotension is late, and fluids must be individualized."
+},
+{
+  type:"mc",
+  topic:"Septic Shock",
+  title:"Early Septic Presentation",
+  stem:"Which finding is most consistent with early septic shock?",
+  options:[
+    "Warm flushed skin",
+    "Bradycardia with spinal cord injury",
+    "Frothy sputum and JVD",
+    "Tracheal deviation"
+  ],
+  answer:[0],
+  rationale:"Early septic shock is distributive and may present with warm flushed skin due to vasodilation."
+},
+{
+  type:"sata",
+  topic:"Septic Shock",
+  title:"Septic Shock Cues",
+  stem:"Which cues support septic shock? Select all that apply.",
+  options:[
+    "Suspected infection",
+    "Fever",
+    "Elevated WBC",
+    "Warm flushed skin early",
+    "Broad-spectrum antibiotics ordered",
+    "Tongue swelling after contrast dye"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Septic shock is related to infection and inflammatory vasodilation. Tongue swelling after contrast points more toward anaphylaxis."
+},
+    {
+  type:"mc",
+  topic:"NGN Priority",
+  title:"Generate Solutions",
+  case:"A client has BP 80/42, HR 150, RR 34, UO 8 mL/hr, cool clammy skin, and increasing confusion.",
+  stem:"Which nursing intervention has the highest priority?",
+  options:[
+    "Administer oxygen and support the airway",
+    "Complete the admission history",
+    "Teach the client about shock",
+    "Document the assessment before intervening"
+  ],
+  answer:[0],
+  rationale:"Always prioritize ABCs. Severe hypotension and altered mental status indicate inadequate oxygen delivery and perfusion."
+},
+{
+  type:"matrix",
+  topic:"ATI Priority",
+  title:"Expected vs Unexpected",
+  stem:"Classify each assessment finding.",
+  columns:["Expected in Compensated","Expected in Progressive","Unexpected"],
+  rows:[
+    {finding:"Normal blood pressure with tachycardia",answer:0},
+    {finding:"Urine output 12 mL/hr",answer:1},
+    {finding:"Confusion",answer:1},
+    {finding:"Warm flushed skin in early septic shock",answer:0},
+    {finding:"Heart rate 58 in hypovolemic shock",answer:2},
+    {finding:"Impending doom",answer:0}
+  ],
+  rationale:"ATI frequently asks you to recognize expected patterns rather than memorize isolated facts."
+},
+{
+  type:"bowtie",
+  topic:"NGN Bow-Tie",
+  title:"Cardiac Tamponade",
+  case:"Client has chest trauma, muffled heart sounds, JVD, hypotension, tachycardia, and narrowed pulse pressure.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Cardiac tamponade",
+    "Hypoglycemia",
+    "Pulmonary embolism",
+    "Stroke"
+  ],
+  actionOptions:[
+    "Prepare for pericardiocentesis",
+    "Administer oxygen",
+    "Restrict oxygen",
+    "Give oral fluids",
+    "Delay notifying provider"
+  ],
+  monitorOptions:[
+    "Blood pressure",
+    "Heart sounds",
+    "Bowel sounds",
+    "Vision changes",
+    "Daily weight"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Tamponade is obstructive shock. Oxygen supports perfusion while preparing for definitive treatment."
+},
+{
+  type:"mc",
+  topic:"ATI Delegation",
+  title:"Who Can You Delegate?",
+  stem:"Which task is appropriate to delegate to an experienced UAP caring for a stable client recovering from shock?",
+  options:[
+    "Measure and record urine output",
+    "Interpret worsening vital-sign trends",
+    "Adjust vasopressor infusion",
+    "Perform the primary assessment"
+  ],
+  answer:[0],
+  rationale:"Stable, routine data collection such as urine output may be delegated. Assessment, interpretation, and medication titration remain the nurse's responsibility."
+},
+{
+  type:"sata",
+  topic:"ATI Priority",
+  title:"Indicators of Improving Perfusion",
+  stem:"Which findings indicate shock treatment is effective? Select all that apply.",
+  options:[
+    "Urine output increases to 35 mL/hr",
+    "Heart rate decreases",
+    "Mental status improves",
+    "Blood pressure improves",
+    "Skin becomes warmer",
+    "Lactate continues rising"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Improving perfusion results in better BP, HR, urine output, mentation, and skin perfusion. Rising lactate suggests worsening tissue hypoxia."
+},
+{
+  type:"mc",
+  topic:"ATI Priority",
+  title:"Lactate Interpretation",
+  stem:"An increasing serum lactate level most likely indicates:",
+  options:[
+    "Improving oxygen delivery",
+    "Anaerobic metabolism from poor tissue perfusion",
+    "Kidney recovery",
+    "Normal response to IV fluids"
+  ],
+  answer:[1],
+  rationale:"Elevated lactate reflects anaerobic metabolism caused by inadequate tissue perfusion."
+},
+{
+  type:"matrix",
+  topic:"NGN",
+  title:"Prioritize the ABCs",
+  stem:"Classify each intervention according to the primary ABC it supports.",
+  columns:["Airway/Breathing","Circulation","Evaluation"],
+  rows:[
+    {finding:"Administer oxygen",answer:0},
+    {finding:"Large-bore IV",answer:1},
+    {finding:"Monitor urine output",answer:2},
+    {finding:"Reassess blood pressure",answer:2},
+    {finding:"Prepare IV fluids",answer:1},
+    {finding:"Assess breath sounds",answer:0}
+  ],
+  rationale:"ATI loves ABC prioritization. Separate interventions by their primary purpose."
+},
+{
+  type:"mc",
+  topic:"Professor Trap",
+  title:"The 'Looks Better' Trap",
+  case:"A client says, 'I actually feel better now.' Assessment shows BP 78/42, HR 148, RR 34, confused, and UO 8 mL/hr.",
+  stem:"What should the nurse conclude?",
+  options:[
+    "The client is improving because they feel better.",
+    "Objective assessment findings take priority over the client's statement.",
+    "The client may be discharged.",
+    "The client no longer requires monitoring."
+  ],
+  answer:[1],
+  rationale:"ATI emphasizes objective assessment findings over subjective improvement when they conflict."
+},
+{
+  type:"mc",
+  topic:"ATI",
+  title:"Underlying Cause",
+  stem:"Why must the underlying cause of shock always be identified and treated?",
+  options:[
+    "Because oxygen alone corrects every type of shock.",
+    "Supportive care alone cannot permanently reverse shock.",
+    "Urine output is more important than treatment.",
+    "Blood pressure is the only outcome that matters."
+  ],
+  answer:[1],
+  rationale:"Fluids, oxygen, and vasopressors support perfusion, but the cause (bleeding, infection, pump failure, obstruction, allergy) must be corrected."
+},
+   {
+  type:"sata",
+  topic:"Final ATI Review",
+  title:"Shock Red Flags",
+  stem:"Which findings are red flags for worsening shock? Select all that apply.",
+  options:[
+    "New confusion",
+    "Urine output 10 mL/hr",
+    "SBP 78 mmHg",
+    "Mottled skin",
+    "Rising lactate",
+    "Pain improved after repositioning"
+  ],
+  answer:[0,1,2,3,4],
+  rationale:"Worsening shock shows decreased brain, kidney, and tissue perfusion. New confusion, low urine output, hypotension, mottling, and rising lactate are major red flags."
+},
+{
+  type:"mc",
+  topic:"Final ATI Review",
+  title:"Best Overall Definition",
+  stem:"Which phrase best describes shock?",
+  options:[
+    "Low oxygen saturation only",
+    "Inadequate tissue perfusion",
+    "High blood pressure emergency",
+    "Pain response after trauma"
+  ],
+  answer:[1],
+  rationale:"Shock is inadequate tissue perfusion, meaning organs and cells are not receiving enough oxygenated blood."
+},
+{
+  type:"mc",
+  topic:"Final ATI Review",
+  title:"Most Important Outcome",
+  stem:"Which finding best indicates improved perfusion after treatment for shock?",
+  options:[
+    "Urine output increases to 35 mL/hr",
+    "Client reports mild thirst",
+    "Temperature remains unchanged",
+    "Client asks for a blanket"
+  ],
+  answer:[0],
+  rationale:"Urine output is a strong indicator of kidney perfusion. Increasing to at least about 30 mL/hr suggests improvement."
+},
+{
+  type:"matrix",
+  topic:"Final ATI Matrix",
+  title:"Shock Type Review",
+  stem:"Match each client finding to the most likely shock type.",
+  columns:["Hypovolemic","Cardiogenic","Septic","Anaphylactic"],
+  rows:[
+    {finding:"Vomiting and diarrhea for 4 days",answer:0},
+    {finding:"Crackles, JVD, frothy sputum",answer:1},
+    {finding:"Warm flushed skin with infection",answer:2},
+    {finding:"Wheezing, hives, tongue swelling",answer:3}
+  ],
+  rationale:"Hypovolemic = volume loss. Cardiogenic = pump failure. Septic = infection/distributive shock. Anaphylactic = allergic airway/circulation emergency."
+},
+{
+  type:"bowtie",
+  topic:"Final ATI Bow-Tie",
+  title:"Mixed Shock Emergency",
+  case:"A client arrives with BP 76/40, HR 148, RR 34, cool clammy skin, confusion, and UO 8 mL/hr after several days of severe vomiting.",
+  stem:"Complete the bow-tie.",
+  conditionOptions:[
+    "Hypovolemic shock",
+    "Cardiogenic shock",
+    "Anaphylactic shock",
+    "Neurogenic shock"
+  ],
+  actionOptions:[
+    "Establish large-bore IV access",
+    "Administer NS or LR as prescribed",
+    "Give diphenhydramine first",
+    "Restrict all fluids",
+    "Ambulate the client"
+  ],
+  monitorOptions:[
+    "Urine output",
+    "Blood pressure and heart rate",
+    "Hives only",
+    "Daily weight only",
+    "Vision changes"
+  ],
+  answer:{
+    condition:0,
+    actions:[0,1],
+    monitoring:[0,1]
+  },
+  rationale:"Severe vomiting causes volume loss. Hypovolemic shock priorities include large-bore IV access, isotonic fluids, and monitoring BP, HR, and urine output."
+}
 ];
 
-let i=0,score=0,selected=[],answered=false;
-
-function start(){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("game").classList.remove("hidden");
-show();
-}
-
-function show(){
-selected=[]; answered=false;
-let q=qs[i];
-document.getElementById("num").innerText="Question "+(i+1)+" of "+qs.length;
-document.getElementById("stem").innerText=q.q;
-document.getElementById("rationale").classList.add("hidden");
-document.getElementById("submit").classList.remove("hidden");
-document.getElementById("next").classList.add("hidden");
-let html="";
-q.o.forEach((x,n)=>html+=`<button class="option" id="o${n}" onclick="pick(${n})">${String.fromCharCode(65+n)}. ${x}</button>`);
-document.getElementById("options").innerHTML=html;
-}
-
-function pick(n){
-if(answered)return;
-let q=qs[i];
-if(q.a.length===1){selected=[n];}
-else{
-if(selected.includes(n)){selected=selected.filter(x=>x!==n);}
-else{selected.push(n);}
-}
-q.o.forEach((_,x)=>document.getElementById("o"+x).classList.toggle("selected",selected.includes(x)));
-}
-
-function same(a,b){
-a=[...a].sort(); b=[...b].sort();
-return JSON.stringify(a)===JSON.stringify(b);
-}
-
-function submit(){
-if(selected.length===0){alert("Pick an answer first 😭");return;}
-answered=true;
-let q=qs[i];
-let ok=same(selected,q.a);
-if(ok)score++;
-q.o.forEach((_,n)=>{
-let el=document.getElementById("o"+n);
-el.classList.remove("selected");
-if(q.a.includes(n))el.classList.add("correct");
-else if(selected.includes(n))el.classList.add("wrong");
-});
-document.getElementById("rationale").innerHTML=(ok?"✅ Correct":"❌ Not quite")+"<br><br>"+q.r;
-document.getElementById("rationale").classList.remove("hidden");
-document.getElementById("submit").classList.add("hidden");
-document.getElementById("next").classList.remove("hidden");
-}
-
-function next(){
-i++;
-if(i>=qs.length){
-document.getElementById("game").classList.add("hidden");
-document.getElementById("end").classList.remove("hidden");
-let pct=Math.round(score/qs.length*100);
-document.getElementById("score").innerText="Score: "+score+"/"+qs.length+" ("+pct+"%)";
-}else show();
-}
 </script>
 </body>
-</html>
+</html> 
